@@ -19,4 +19,4 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 include(common)
 
 # add own libraries
-add_subdirectory(Proyecto-DatosII)
+add_subdirectory(src)
