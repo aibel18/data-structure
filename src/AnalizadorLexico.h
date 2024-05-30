@@ -29,7 +29,7 @@ public:
 	AnalizadorLexico();
 	~AnalizadorLexico();
 
-	bool automata(string&,int);
+	bool automata(string,int);
 
 	bool buscaNumero(string&,int&);
 	bool buscaIdentificador(string&,int&);

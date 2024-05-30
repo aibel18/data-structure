@@ -86,7 +86,7 @@ bool AnalizadorSintactico::camposArgumentosP(Nodo *&temp){
 	temp = respaldo;
 	return false;
 }
-//comprueba que exista un argumentos -  VAR TIPO (TAMAÑO)
+//comprueba que exista un argumentos -  VAR TIPO (TAMANO)
 bool AnalizadorSintactico::variableTipo(Nodo * & temp){
 
 	Nodo* respaldo = temp;

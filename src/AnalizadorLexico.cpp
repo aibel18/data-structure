@@ -62,7 +62,7 @@ void AnalizadorLexico::cargarOperadores(){
 	}
 }
 //automata que verifica la valides de las palabras
-bool AnalizadorLexico::automata(string &cadena,int _largo){
+bool AnalizadorLexico::automata(string cadena,int _largo){
 	int i=0;
 	int temp =0;
 	int largo = _largo;

@@ -25,10 +25,10 @@ RegistroDatos codificar(Lista & lista){
 	Nodo* temp = lista.inicio->siguiente->siguiente->siguiente->siguiente;
 
 	int numeroC =0;
-	int tamañoC =0;
+	int tamanoC =0;
 	while(temp->informacion.compare(")")){
 
-		tamañoC += convertir(temp->siguiente->siguiente->siguiente->informacion)+ sizeof(int);
+		tamanoC += convertir(temp->siguiente->siguiente->siguiente->informacion)+ sizeof(int);
 
 		numeroC++;
 
@@ -40,7 +40,7 @@ RegistroDatos codificar(Lista & lista){
 	}
 	temp = lista.inicio->siguiente->siguiente->siguiente->siguiente;
 
-	RegistroDatos rd(numeroC,tamañoC);
+	RegistroDatos rd(numeroC,tamanoC);
 
 	int i=0;
 	while(temp->informacion.compare(")")){
@@ -48,7 +48,7 @@ RegistroDatos codificar(Lista & lista){
 		CampoDatos cd1(convertir(temp->siguiente->siguiente->siguiente->informacion));
 		cd1 = temp->informacion.c_str();
 
-		rd.añadir(i,cd1);
+		rd.anadir(i,cd1);
 
 		temp = temp->siguiente->siguiente->siguiente->siguiente->siguiente;
 
@@ -65,7 +65,7 @@ RegistroDatos codificar2(RegistroDatos & r,Lista & lista){
 
 	Nodo* temp = lista.inicio->siguiente->siguiente->siguiente->siguiente->siguiente;
 
-	RegistroDatos rd(r.numeroCampos,r.tamañoRegistro);
+	RegistroDatos rd(r.numeroCampos,r.tamanoRegistro);
 
 	int i=0;
 	while(temp->informacion.compare(")")){
@@ -73,7 +73,7 @@ RegistroDatos codificar2(RegistroDatos & r,Lista & lista){
 		CampoDatos cd1( r.campos[i].longitud);
 		cd1 = temp->informacion.c_str();
 
-		rd.añadir(i,cd1);
+		rd.anadir(i,cd1);
 
 		temp = temp->siguiente;
 
@@ -99,7 +99,7 @@ void Tabla::crearTabla(Lista &lista){
 
 	FicheroDatos f;
 
-	string nombreV = "BaseDatos/"+nombre+".txt";
+	string nombreV = "./BaseDatos/"+nombre+".txt";
 
 	if(f.abrir(nombreV)){
 		throw excepciones::tablaExiste();
@@ -228,9 +228,9 @@ void Tabla::crearIndice(int columna){
 	FicheroDatos f;
 	if(f.abrir(nombreV)){
 
-		f.tamRegistro = encabezado.tamañoRegistro;
+		f.tamRegistro = encabezado.tamanoRegistro;
 
-		f.posInicial = 10 +encabezado.tamañoRegistro;
+		f.posInicial = 10 +encabezado.tamanoRegistro;
 	
 		ArbolB a(ordenArbol);
 		bClaves t ;
@@ -239,7 +239,7 @@ void Tabla::crearIndice(int columna){
 		f.f.seekg (0, ios::end);
 		int length = f.f.tellg();
 
-		length = (length-f.posInicial)/encabezado.tamañoRegistro;
+		length = (length-f.posInicial)/encabezado.tamanoRegistro;
 		
 		for(int i =0;i<length; i++){
 
@@ -247,7 +247,7 @@ void Tabla::crearIndice(int columna){
 
 			RegistroDatos temporal(encabezado.numeroCampos,f.tamRegistro,caden);
 
-			t.registro = (temporal.tamañoRegistro+2)*i+f.posInicial;//dando la direcion fisica al fichero de indicees
+			t.registro = (temporal.tamanoRegistro+2)*i+f.posInicial;//dando la direcion fisica al fichero de indicees
 			t.valor = temporal.campos[columna].valor;
 
 			a.insertar(t);
@@ -274,21 +274,21 @@ void Tabla::crearIndice(int columna){
 	}
 }
 //guarda un nodo de un arbol en un fichero
-void guardarCampo(FicheroIndice &f,nodoB* n,int &numeroC,int &tamañoC){
+void guardarCampo(FicheroIndice &f,nodoB* n,int &numeroC,int &tamanoC){
 
 	Campo campo;
 	Registro registro(numeroC,f.tamRegistro);
 	int i;
 	for(i=0;i<n->clavesUsadas;i++){
-		campo = Campo(tamañoC,n->claves[i].registro);
+		campo = Campo(tamanoC,n->claves[i].registro);
 		campo = n->claves[i].valor.c_str();
 
-		registro.añadir(i,campo);
+		registro.anadir(i,campo);
 	}
 
 	for(int k=i;k<registro.numeroCampos;k++){
-		campo = Campo(tamañoC,0);
-		registro.añadir(k,campo);
+		campo = Campo(tamanoC,0);
+		registro.anadir(k,campo);
 	}
 
 	

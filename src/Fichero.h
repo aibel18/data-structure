@@ -2,7 +2,7 @@
 #define Fichero_H
 
 #include <fstream>
-#include <String>
+#include <cstring>
 #include "ArbolB.h"
 using namespace std;
 
@@ -54,7 +54,7 @@ public:
 //clase registro que contiene varios campos
 class RegistroDatos{
 public:
-	int tamañoRegistro;//longitud del registro
+	int tamanoRegistro;//longitud del registro
 	int numeroCampos;//numero de registros
 	CampoDatos* campos;//campos
 
@@ -62,13 +62,13 @@ public:
 	RegistroDatos(){}
 	RegistroDatos(int numC,int longitud){
 
-		tamañoRegistro = longitud ;
+		tamanoRegistro = longitud ;
 		numeroCampos = numC;
 		campos = new CampoDatos[numC];
 	}
 	RegistroDatos(int numC,int longitud,char* cadena){
 
-		tamañoRegistro = longitud ;
+		tamanoRegistro = longitud ;
 		numeroCampos = numC;
 		campos = new CampoDatos[numC];
 
@@ -76,13 +76,13 @@ public:
 
 		for(int i=0; i<numC;i++){
 
-			convertirNumero(&longitudColumna ,cadena);//obtenemos el tamaño del campo
+			convertirNumero(&longitudColumna ,cadena);//obtenemos el tamano del campo
 			cadena = cadena +sizeof(int);
 
 			CampoDatos campo(longitudColumna);
 			campo = cadena;////obtenemos el dato del campo
 			
-			añadir(i,campo);//añadimos al registro
+			anadir(i,campo);//anadimos al registro
 			
 			cadena = cadena + longitudColumna;
 		}
@@ -91,29 +91,29 @@ public:
 
 		numeroCampos = numC;
 		campos = new CampoDatos[numC];
-		tamañoRegistro =0;
+		tamanoRegistro =0;
 
 		int longitudColumna=0;
 
 		for(int i=0; i<numC;i++){
 
-			convertirNumero(&longitudColumna ,cadena);//obtenemos el tamaño del campo
-			cadena = cadena +sizeof(int);//avansamos el puntero el tamaño del int
+			convertirNumero(&longitudColumna ,cadena);//obtenemos el tamano del campo
+			cadena = cadena +sizeof(int);//avansamos el puntero el tamano del int
 
 			CampoDatos campo(longitudColumna);
 			campo = cadena;////obtenemos el dato del campo
 			
-			añadir(i,campo);//añadimos al registro
+			anadir(i,campo);//anadimos al registro
 
-			//actualizamos el tamaño del registro
-			tamañoRegistro = tamañoRegistro + campo.longitud + sizeof(int);
+			//actualizamos el tamano del registro
+			tamanoRegistro = tamanoRegistro + campo.longitud + sizeof(int);
 			
 			cadena = cadena + longitudColumna;
 		}
 	}
 
-	//añadimos un campo al registro
-	void añadir(int i,CampoDatos campo){
+	//anadimos un campo al registro
+	void anadir(int i,CampoDatos campo){
 		campos[i] = campo;
 		
 	}
@@ -126,8 +126,8 @@ public:
 class FicheroDatos {
 public:
 	fstream f; // Stream para E/S al fichero
-	int tamRegistro;//tamaño del registro
-	int numeroColumnas;//tamaño del registro
+	int tamRegistro;//tamano del registro
+	int numeroColumnas;//tamano del registro
 	int posInicial;//posicion inicial
 public:
 	FicheroDatos();
@@ -228,7 +228,7 @@ public:
 			Campo temp(longitudC,direccionC);
 			temp = cadena; //asignando el valor a temp
 			
-			añadir(i,temp);
+			anadir(i,temp);
 			
 			cadena = cadena + longitudC;
 		}
@@ -326,8 +326,8 @@ public:
 		return false;
 	}
 
-	//añade un elemento al registro
-	void añadir(int i,Campo campo){
+	//anade un elemento al registro
+	void anadir(int i,Campo campo){
 		campos[i] = campo;
 	}
 	~Registro(){
@@ -338,7 +338,7 @@ public:
 //clase que gestiona los ficheros de los indices
 class FicheroIndice {
 public: fstream f; // Stream para E/S al fichero
-	int tamRegistro;//tamaño de registro
+	int tamRegistro;//tamano de registro
 	int posInicial;//pos inicial
 	int numeroColumnas;
 	
@@ -368,7 +368,7 @@ public:
 	void leerRegistro2(int pos, char*);
 	void eliminarRegistro(unsigned long pos);
 	void actualizar(unsigned long pos, const Registro &nuevoreg);
-	void compactar(); // Eliminar físicamente los borrados
+	void compactar(); // Eliminar fnsicamente los borrados
 	void vaciar(); // Eliminar todos los registros
 };
 

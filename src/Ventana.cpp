@@ -127,13 +127,13 @@ void mostrarInformacion(HDC &hdc,DTabla &t,Tabla &tabla){
 
 	if(ff.abrir("BaseDatos/"+tabla.nombre+".txt")){	
 
-		char *temp = new char[tabla.encabezado.tamañoRegistro];
+		char *temp = new char[tabla.encabezado.tamanoRegistro];
 
-		ff.tamRegistro = tabla.encabezado.tamañoRegistro;
+		ff.tamRegistro = tabla.encabezado.tamanoRegistro;
 
 		ff.leerRegistro2(*tabla.resultados,temp);
 
-		RegistroDatos datos(tabla.encabezado.numeroCampos,tabla.encabezado.tamañoRegistro,temp);
+		RegistroDatos datos(tabla.encabezado.numeroCampos,tabla.encabezado.tamanoRegistro,temp);
 
 		t.dibujarFila(hdc,datos,1);
 	

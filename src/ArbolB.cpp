@@ -1,5 +1,5 @@
 #include "ArbolB.h"
-int compara(string& c,string &cadena){
+int compara(string c,string cadena){
 
 	unsigned int temp = c.length() ;
 	unsigned int temp2 = cadena.length() ;

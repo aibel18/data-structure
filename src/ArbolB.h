@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int compara(string& c,string &cadena);
+int compara(string c,string cadena);
 
 struct bClaves{
 	long registro;
