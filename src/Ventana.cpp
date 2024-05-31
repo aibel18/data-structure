@@ -1,3 +1,5 @@
+#if (defined(_WIN32) || defined(__WIN32__))
+
 #include "Ventana.h"
 
 #include "AnalizadorSintactico.h"
@@ -276,3 +278,5 @@ LRESULT CALLBACK  procesos(HWND hwnd, UINT message, WPARAM wParam, LPARAM
 	}
 	return DefWindowProc (hwnd, message, wParam, lParam) ;
 }
+
+#endif

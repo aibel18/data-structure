@@ -1,3 +1,5 @@
+#if (defined(_WIN32) || defined(__WIN32__))
+
 #include "Botones.h"
 BotonEdit::BotonEdit(HINSTANCE hinst,HWND hwnd,HMENU h)
 {
@@ -59,3 +61,5 @@ void Boton::crear_boton(char* nombre,int iniX,int iniY,int x,int y)
 	WS_VISIBLE|WS_CHILD,
 	iniX,iniY,x,y, IdPadre, (HMENU)hijo, IdAplicacion, NULL);
 }
+
+#endif
