@@ -1,1 +1,6 @@
-SELECT * FROM MyTable WHERE name='Rat'
+SELECT * FROM MyTable
+INSERT INTO MyTable VALUES('Abel', '30')
+INSERT INTO MyTable VALUES('Stive', '20')
+INSERT INTO MyTable VALUES('Mikel', '12')
+INSERT INTO MyTable VALUES('Rosa', '25')
+CREATE TABLE MyTable (name text(10), age text(4))

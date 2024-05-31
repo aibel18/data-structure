@@ -26,6 +26,49 @@ int main()
     // string cadena = "SELECT * FROM MyTable WHERE name='Rat'";
     // string cadena = "SELECT * FROM MyTable";
 
+
+    fstream file;
+ 
+    // Open the file
+    file.open("test.txt", ios::in | ios::out);
+    file.seekg(0);
+    file.seekp(0);
+
+    //*
+    string c = "abel ticona\n";
+    // file.write(c.c_str(), c.size());
+
+    file.seekg(c.size());
+    printf("%i %i  %i\n", c.size(), file.tellg(), file.tellp());
+    string n = "stive";
+    file.write(n.c_str(), n.size());
+    printf("%i %i  %i\n", n.size(), file.tellg(), file.tellp());
+    file.seekg(0, ios::end);
+    printf("%i %i  %i\n", c.size(), file.tellg(), file.tellp());
+
+
+
+    /*
+    string cl = "\r\n";
+    file.write(cl.c_str(), cl.size());
+
+    printf("%i %i  %i\n", cl.size(), file.tellg(), file.tellp());
+
+    string c2 = "elizabeth";
+    file.write(c2.c_str(), c2.size());
+
+    printf("%i %i  %i\n", c2.size(), file.tellg(), file.tellp());
+
+    //*/
+
+    file.close();
+
+    return 0;
+
+
+
+
+
     ifstream sqlFile;
     sqlFile.open ("sql.txt");
     string cadena;
