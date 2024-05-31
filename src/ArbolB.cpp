@@ -56,6 +56,7 @@ bool ArbolB::encontrarNodo(nodoB *Act,bClaves &cl, int *pos){
 	
 	return t==0;
 }
+//busca un nodo en el arbol
 bClaves* ArbolB::busca(nodoB* nodo,bClaves &cadena){
 	if(nodo){
 		int i=nodo->clavesUsadas/2,n,m=0;
@@ -72,6 +73,7 @@ bClaves* ArbolB::busca(nodoB* nodo,bClaves &cadena){
 	}
 	return 0;
 }
+//busaca un noso en el arbol
 nodoB* ArbolB::encontrar(bClaves &cl,int *pos,nodoB *Nodo,bool r){
 	if(r) Nodo=raiz;
 	if(!Nodo)

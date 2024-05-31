@@ -64,7 +64,7 @@ bool FicheroDatos::abrir(string nombre){
 		//cargamos el numero de columnas
 		f.read(reinterpret_cast<char *>(&numeroColumnas),sizeof(int));
 
-		posInicial = sizeof(int)*2 + tamRegistro+2;
+		posInicial = sizeof(int)*2 + tamRegistro+SIZE_ENTER;
 		return true;
 	}
 
@@ -116,7 +116,7 @@ void FicheroDatos::insertar(int posR,int posC,RegistroDatos & nuevo){
 		for(int i=0; i<posC;i++){
 			pos =pos + nuevo.campos[i].longitud;
 		}
-		f.seekp ((nuevo.tamanoRegistro+2)*posR +pos+posInicial, ios::beg);
+		f.seekp ((nuevo.tamanoRegistro+SIZE_ENTER)*posR +pos+posInicial, ios::beg);
 		f.write(reinterpret_cast<char *>(nuevo.campos[posC].valor), nuevo.campos[posC].longitud);
 	
 	}	
@@ -125,12 +125,12 @@ void FicheroDatos::insertar(int posR,int posC,RegistroDatos & nuevo){
 void FicheroDatos::leerRegistro(int pos,char* cadena){
 	if(f.is_open()){
 		
-		f.seekg ((tamRegistro+2)*pos+posInicial, ios::beg);
+		f.seekg ((tamRegistro+SIZE_ENTER)*pos+posInicial, ios::beg);
 		f.read(reinterpret_cast<char *>(cadena), tamRegistro);
 	}	
 }
 //lee un registro entero de acuerdo a su tamano con direccion fisica
-void FicheroDatos::leerRegistro2(unsigned long pos,char* cadena){
+void FicheroDatos::leerRegistro2(int pos,char* cadena){
 	if(f.is_open()){
 		
 		f.seekg (pos, ios::beg);
@@ -163,7 +163,7 @@ bool FicheroIndice::crear(string fdatos, int columnas, int tamanoC){
 		f.write(reinterpret_cast<char *>(&tamanoC), sizeof(int));
 		f.write(reinterpret_cast<char *>(&columnas), sizeof(int));		
 
-		int raiz=0;
+		int raiz=-1;
 		f.write(reinterpret_cast<char *>(&raiz), sizeof(int));
 
 		f.write("\n",1);	
@@ -189,7 +189,7 @@ bool FicheroIndice::abrir(string fdatos){
 		f.read(reinterpret_cast<char *>(&numeroColumnas),sizeof(int));
 
 		tamRegistro = ancho*numeroColumnas + numeroColumnas*(sizeof(int))+ (numeroColumnas+1)*(sizeof(int));
-		posInicial = sizeof(int)*3+2;
+		posInicial = sizeof(int)*3+SIZE_ENTER;
 
 		return true;
 	}
@@ -218,7 +218,7 @@ void FicheroIndice::insertar(Registro & nuevo){
 void FicheroIndice::insertar(int posR,Registro & nuevo){
 	if(f.is_open()){
 
-		f.seekp ((nuevo.longitudFija+2)*posR+14, ios::beg);
+		f.seekp ((nuevo.longitudFija+SIZE_ENTER)*posR+12 +SIZE_ENTER, ios::beg);
 		
 		for(int i=0;i<nuevo.numeroCampos;i++){
 			f.write(reinterpret_cast<char *>(&nuevo.campos[i].direccion), sizeof(int));
@@ -238,7 +238,7 @@ void FicheroIndice::insertar(int posR,int posC,Registro& nuevo){
 		pos =pos+ 4 + nuevo.campos[i].longitud;
 	}
 
-	f.seekp ((nuevo.longitudFija+2)*posR + pos +14, ios::beg);
+	f.seekp ((nuevo.longitudFija+SIZE_ENTER)*posR + pos +12 + SIZE_ENTER, ios::beg);
 
 	f.write(reinterpret_cast<char *>(&nuevo.campos[posC].direccion), sizeof(int));
 	f.write(reinterpret_cast<char *>(nuevo.campos[posC].valor), nuevo.campos[posC].longitud);
@@ -248,7 +248,7 @@ void FicheroIndice::insertar(int posR,int posC,Registro& nuevo){
 void FicheroIndice::leerRegistro(int pos,char* cadena){
 	if(f.is_open()){
 		
-		f.seekg ((tamRegistro+2)*pos+posInicial, ios::beg);
+		f.seekg ((tamRegistro+SIZE_ENTER)*pos+posInicial, ios::beg);
 		f.read(reinterpret_cast<char *>(cadena),tamRegistro);
 	}	
 }

@@ -30,4 +30,6 @@ public:
 	int analiza(Nodo *&temp);
 
 };
+
+
 #endif

@@ -6,6 +6,9 @@
 #include "ArbolB.h"
 using namespace std;
 
+#define SIZE_ENTER 1
+
+//funcion que convierte una cadena en un numero entero
 void convertirNumero(int *numero,char* cadena);
 
 //clase campo que almacena un dato de la tabla datos
@@ -34,7 +37,7 @@ public:
 	//llenamos el dato con un valor
 	void operator = (char *cadena){
 
-		int longitud  = strlen(cadena);
+		//int longitud  = strlen(cadena);
 		for(int i=0;i<longitud;i++){
 			valor[i] = cadena[i];
 		}
@@ -43,7 +46,8 @@ public:
 	//llenamos el dato con un valor const
 	void operator = (const char *cadena){
 
-		int longitud  = strlen(cadena);
+		//int longitudC = strlen(cadena);
+
 		for(int i=0;i<longitud;i++){
 			valor[i] = cadena[i];
 		}
@@ -120,6 +124,9 @@ public:
 	~RegistroDatos(){
 		campos = 0;
 	}
+    int getTotalSize() {
+        return tamanoRegistro + SIZE_ENTER;
+    }
 };
 
 //clase que administra el fichero de datos
@@ -144,7 +151,7 @@ public:
 	void insertar(int ,int,RegistroDatos &nuevoreg);
 	
 	void leerRegistro(int pos,char* cadena);
-	void leerRegistro2(unsigned long pos,char* cadena);
+	void leerRegistro2(int pos,char* cadena);
 
 	void eliminarRegistro(unsigned long pos);	
 	void actualizar(unsigned long pos, const RegistroDatos &nuevoreg);

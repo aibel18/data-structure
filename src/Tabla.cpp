@@ -3,8 +3,25 @@
 #include "ListaDoble.h"
 
 #include <iostream>
+#include <sys/stat.h>
 
 using namespace std;
+
+//funcion que codifoca un Registro a una cadena de caracteres para ser enviadas por el socket
+string codificaReg(RegistroDatos &d){
+
+	string cadena ="";
+
+	int i=0;
+	while(i<d.numeroCampos){
+
+		cadena = cadena + d.campos[i].valor+"|";
+		i++;
+	}
+
+	return cadena;
+
+}
 
 //funcion de convierte un cadena en numero
 int convertir(string cadena){
@@ -22,18 +39,26 @@ int convertir(string cadena){
 //funcion que codifica una lista de campos en un registro
 RegistroDatos codificar(Lista & lista){
 
+    // Move 4 tokens to find the first <field>
+    //  0      1     2         3 4
+    //  CREATE TABLE nameTable ( nameField
 	Nodo* temp = lista.inicio->siguiente->siguiente->siguiente->siguiente;
 
-	int numeroC =0;
-	int tamanoC =0;
+	int numeroC =0; // field count
+	int tamanoC =0; // field size
 	while(temp->informacion.compare(")")){
 
+        // Move 3 tokens to find <field size>
+        // 4         5         6 7
+        // nameField typeField ( fieldSize
 		tamanoC += convertir(temp->siguiente->siguiente->siguiente->informacion)+ sizeof(int);
 
 		numeroC++;
 
+        // Move 5 tokens to find the end or 6 tokens to find the next field
+        // 4         5         6 7         8 9
+        // nameField typeField ( fieldSize ) ,
 		temp = temp->siguiente->siguiente->siguiente->siguiente->siguiente;
-
 		if(!temp->informacion.compare(","))
 			temp = temp->siguiente;
 
@@ -68,7 +93,11 @@ RegistroDatos codificar2(RegistroDatos & r,Lista & lista){
 	RegistroDatos rd(r.numeroCampos,r.tamanoRegistro);
 
 	int i=0;
-	while(temp->informacion.compare(")")){
+	while( temp->informacion.compare(")")){
+
+
+		if( i>=r.numeroCampos)
+			throw excepciones::exesoCampos();
 
 		CampoDatos cd1( r.campos[i].longitud);
 		cd1 = temp->informacion.c_str();
@@ -82,12 +111,20 @@ RegistroDatos codificar2(RegistroDatos & r,Lista & lista){
 		if(!temp->informacion.compare(","))
 			temp = temp->siguiente;
 	}
-
 	
 	if(i!=r.numeroCampos)
 		throw excepciones::exesoCampos();
 
 	return rd;
+}
+
+#define DATABASE_NAME "DataBase/"
+
+Tabla::Tabla() {
+    // Creating a directory
+    struct stat sb;
+    if (stat(DATABASE_NAME, &sb))
+        mkdir(DATABASE_NAME, 0777);
 }
 
 //crea una tabla
@@ -99,7 +136,7 @@ void Tabla::crearTabla(Lista &lista){
 
 	FicheroDatos f;
 
-	string nombreV = "./BaseDatos/"+nombre+".txt";
+	string nombreV = DATABASE_NAME+nombre+".txt";
 
 	if(f.abrir(nombreV)){
 		throw excepciones::tablaExiste();
@@ -114,15 +151,13 @@ void Tabla::crearTabla(Lista &lista){
 
 			for(int i=0;i<rd.numeroCampos;i++){
 
-				 nombreIV= "BaseDatos/"+nombre+"-"+rd.campos[i].valor+".txt";
+				 nombreIV= DATABASE_NAME+nombre+"-"+rd.campos[i].valor+".txt";
 				 if(!f2.crear(nombreIV,ordenArbol-1,rd.campos[i].longitud)){
 
 					 throw excepciones::tablaError();
 					 return ;
 				 }
 			}
-
-			cout<<"se creo satisfactoriamente";
 			f2.f.close();
 			
 		}
@@ -135,7 +170,7 @@ void Tabla::insertar( Lista& lista){
 
 	nombre = lista.inicio->siguiente->siguiente->informacion;
 
-	string nombreV = "BaseDatos/"+nombre+".txt";
+	string nombreV = DATABASE_NAME+nombre+".txt";
 
 	if(f.abrir(nombreV)){
 
@@ -146,6 +181,8 @@ void Tabla::insertar( Lista& lista){
 		f.insertar(registro);
 
 		f.f.close();
+
+        CampoDatos * temp = registro.campos;
 
 		for(int i=0;i< encabezado.numeroCampos;i++){
 
@@ -164,22 +201,29 @@ void Tabla::buscar(Lista &lista){
 
 	FicheroDatos ff;
 	nombre = lista.inicio->siguiente->siguiente->siguiente->informacion;
-	string nombreV = "BaseDatos/"+nombre+".txt";
+	string nombreV = DATABASE_NAME+nombre+".txt";
 
 	if(ff.abrir(nombreV)){
 
+		Nodo* tem = lista.inicio;
+		tem = busca(tem,"WHERE");
+
 		ff.cargarCabecera(encabezado);
-		nombreV = "BaseDatos/"+nombre+"-"+lista.inicio->siguiente->siguiente->siguiente->siguiente->siguiente->informacion+".txt";
-		FicheroIndice fI;	
-		if(fI.abrir(nombreV)){
 
-			Nodo* tem = lista.inicio;
-			tem = busca(tem,"WHERE");
+		//carga el titulo
+		Buffer = codificaReg(encabezado);
 
-			if(tem){
+		if(tem){
+			
+			nombreV = DATABASE_NAME+nombre+"-"+tem->siguiente->informacion+".txt";
+			FicheroIndice fI;	
+			if(fI.abrir(nombreV)){
 
 				int dRaiz;
 				fI.leerEncabezado(raiz.longitudFija,raiz.numeroCampos,dRaiz);
+
+				if(dRaiz==-1)
+					throw excepciones::datoNoEncuentra();
 
 				char *cadena = new char [fI.tamRegistro];
 				fI.leerRegistro(dRaiz,cadena);
@@ -199,15 +243,32 @@ void Tabla::buscar(Lista &lista){
 					b= t;
 				}
 				if(encontrado){
-					resultados = new int;
-					*resultados = direccion;
+					
+					char *buffer = new char[ff.tamRegistro];
+					ff.leerRegistro2(direccion,buffer);
+
+					RegistroDatos dd(encabezado.numeroCampos,buffer);
+
+					Buffer = Buffer+ '*'+codificaReg(dd);
+
+					delete buffer;
+					buffer =0;
 				}
 				else
 					throw excepciones::datoNoEncuentra();
+				delete cadena;
+				cadena=0;
 			}
+			else	
+				throw excepciones::campoNoEncuentra();
 		}
-		else	
-			throw excepciones::campoNoEncuentra();
+		else{
+			//mostrando toda la tabla entera
+			mostrarTabla(ff,1);	
+
+
+		}
+		
 	}
 
 	else	
@@ -216,21 +277,16 @@ void Tabla::buscar(Lista &lista){
 
 void Tabla::ordenar(Lista& lista){
 
-
 }
 //crea los indices segun lacolumna
 void Tabla::crearIndice(int columna){
 
-	string nombreV = "BaseDatos/"+nombre+".txt";
+	string nombreV = DATABASE_NAME+nombre+".txt";
 
 	ordenArbol =4;
 
 	FicheroDatos f;
 	if(f.abrir(nombreV)){
-
-		f.tamRegistro = encabezado.tamanoRegistro;
-
-		f.posInicial = 10 +encabezado.tamanoRegistro;
 	
 		ArbolB a(ordenArbol);
 		bClaves t ;
@@ -247,14 +303,13 @@ void Tabla::crearIndice(int columna){
 
 			RegistroDatos temporal(encabezado.numeroCampos,f.tamRegistro,caden);
 
-			t.registro = (temporal.tamanoRegistro+2)*i+f.posInicial;//dando la direcion fisica al fichero de indicees
+			t.registro = temporal.getTotalSize()*i+f.posInicial;//dando la direcion fisica al fichero de indicees
 			t.valor = temporal.campos[columna].valor;
 
 			a.insertar(t);
 		}
-		a.mostrarArbol();
 
-		string cadena2 = "BaseDatos/"+nombre+"-"+encabezado.campos[columna].valor+".txt";
+		string cadena2 = DATABASE_NAME+nombre+"-"+encabezado.campos[columna].valor+".txt";
 
 		FicheroIndice f2;
 
@@ -273,7 +328,28 @@ void Tabla::crearIndice(int columna){
 		f.f.close();
 	}
 }
-//guarda un nodo de un arbol en un fichero
+
+void Tabla::mostrarTabla(FicheroDatos &ff,int i){
+
+	char *buffer = new char[encabezado.tamanoRegistro];
+
+	ff.f.seekg (0, ios::end);
+	int length = ff.f.tellg();
+
+	length = (length-ff.posInicial)/encabezado.getTotalSize();
+
+	for(int i =0;i< length; i++){
+
+		Buffer = Buffer + '*';
+
+		ff.leerRegistro(i,buffer);
+
+        RegistroDatos rd(encabezado.numeroCampos,buffer);
+		Buffer = Buffer + codificaReg(rd);
+	}
+}
+
+// guarda un nodo de un arbol en un fichero
 void guardarCampo(FicheroIndice &f,nodoB* n,int &numeroC,int &tamanoC){
 
 	Campo campo;

@@ -61,7 +61,7 @@ bool AnalizadorSintactico::camposArgumentos(Nodo *&temp){
 
 	Nodo* respaldo = temp;
 
-	while(temp != 0 && ( temp->token == CADE || temp->token == NUM )){
+	while(temp != 0 && ( temp->token == IDE ||temp->token == CADE || temp->token == NUM )){
 
 		temp = temp->siguiente;
 		if(temp !=0 && !temp->informacion.compare(","))
