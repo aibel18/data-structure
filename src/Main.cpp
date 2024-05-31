@@ -15,7 +15,7 @@ int main()
 	
 	// return ven.cicloMensaje();
 
-    string cadena = "CREATE TABLE MyTable (name text(10), age text(4))";
+    // string cadena = "CREATE TABLE MyTable (name text(10), age text(4))";
     // string cadena = "INSERT INTO MyTable VALUES('Mikel', '12')";
     // string cadena = "INSERT INTO MyTable VALUES('Rat', '11')";
     // string cadena = "INSERT INTO MyTable VALUES('jarni', '9')";
@@ -23,8 +23,15 @@ int main()
     // string cadena = "INSERT INTO MyTable VALUES('Stive', '21')";
     // string cadena = "INSERT INTO MyTable VALUES('Rosa', '31')";
     // string cadena = "INSERT INTO MyTable VALUES('Rocko', '1')";
-    // string cadena = "SELECT * FROM MyTable WHERE name='Rosa'";
+    // string cadena = "SELECT * FROM MyTable WHERE name='Rat'";
     // string cadena = "SELECT * FROM MyTable";
+
+    ifstream sqlFile;
+    sqlFile.open ("sql.txt");
+    string cadena;
+
+    getline( sqlFile, cadena );
+
     static AnalizadorLexico lexico;
     static AnalizadorSintactico sintactico;
     static Tabla tabla;

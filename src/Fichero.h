@@ -6,7 +6,11 @@
 #include "ArbolB.h"
 using namespace std;
 
-#define SIZE_ENTER 1
+#if (defined(_WIN32) || defined(__WIN32__))
+	#define SIZE_ENTER 3
+#else
+	#define SIZE_ENTER 1
+#endif
 
 //funcion que convierte una cadena en un numero entero
 void convertirNumero(int *numero,char* cadena);
