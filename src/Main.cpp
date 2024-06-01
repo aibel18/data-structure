@@ -1,35 +1,31 @@
-// #include "Ventana.h"
-// #include <windows.h>
 #include "Tabla.h"
 #include "AnalizadorSintactico.h"
 
+#if (defined(_WIN32) || defined(__WIN32__))
 
-// int WINAPI WinMain(	HINSTANCE hInst,HINSTANCE hPrevInst,
-// 				   char* cmdParam,int cmdShow)
-int main()
-{
+#include "Ventana.h"
+#include <windows.h>
 
-	// Ventana ven(procesos,"Mi Ventana",hInst);
-	// ven.crearVentana(750,500);
-	// ven.mostrar(cmdShow);
+int WINAPI WinMain(	HINSTANCE hInst,HINSTANCE hPrevInst, char* cmdParam,int cmdShow) {
+	Ventana ven(procesos,"Mi Ventana",hInst);
+	ven.crearVentana(750,650);
+	ven.mostrar(cmdShow);
 	
-	// return ven.cicloMensaje();
+	return ven.cicloMensaje();
+}
 
-    string cadena = "CREATE TABLE MyTable (name text(10), age text(4))";
-    // string cadena = "INSERT INTO MyTable VALUES('Mikel', '12')";
-    // string cadena = "INSERT INTO MyTable VALUES('Rat', '11')";
-    // string cadena = "INSERT INTO MyTable VALUES('jarni', '9')";
-    // string cadena = "INSERT INTO MyTable VALUES('Nayeli', '13')";
-    // string cadena = "INSERT INTO MyTable VALUES('Stive', '21')";
-    // string cadena = "INSERT INTO MyTable VALUES('Rosa', '31')";
-    // string cadena = "INSERT INTO MyTable VALUES('Rocko', '1')";
-    // string cadena = "SELECT * FROM MyTable WHERE name='Rosa'";
-    // string cadena = "SELECT * FROM MyTable";
+#else
+
+int main() {
+    ifstream sqlFile;
+    sqlFile.open ("sql.txt");
+    string cadena;
+
+    getline( sqlFile, cadena );
+
     static AnalizadorLexico lexico;
     static AnalizadorSintactico sintactico;
     static Tabla tabla;
-
-    // int longitud =strlen(cadena);
 
     if (cadena.size() > 0) {
 
@@ -85,3 +81,4 @@ int main()
     return 0;
 	
 }
+#endif

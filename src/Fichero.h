@@ -6,7 +6,11 @@
 #include "ArbolB.h"
 using namespace std;
 
-#define SIZE_ENTER 1
+#if (defined(_WIN32) || defined(__WIN32__))
+	#define SIZE_ENTER 1
+#else
+	#define SIZE_ENTER 1
+#endif
 
 //funcion que convierte una cadena en un numero entero
 void convertirNumero(int *numero,char* cadena);
@@ -235,7 +239,7 @@ public:
 			Campo temp(longitudC,direccionC);
 			temp = cadena; //asignando el valor a temp
 			
-			anadir(i,temp);
+            campos[i] = temp;
 			
 			cadena = cadena + longitudC;
 		}
@@ -340,6 +344,9 @@ public:
 	~Registro(){
 		campos = 0;
 	}
+    int getTotalSize() {
+        return longitudFija + SIZE_ENTER;
+    }
 };
 
 //clase que gestiona los ficheros de los indices

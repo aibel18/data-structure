@@ -21,7 +21,7 @@ bool FicheroDatos::crear(string nombre,RegistroDatos registro){
 
 		//si no existe lo creamos
 		
-		f.open(nombre.c_str(),ios::in | ios::out | ios::trunc);
+		f.open(nombre.c_str(),ios::in | ios::out | ios::trunc | ios::binary);
 		f.seekg (0, ios::beg);
 		f.seekp (0, ios::beg);
 
@@ -54,7 +54,7 @@ bool FicheroDatos::crear(string nombre,RegistroDatos registro){
 bool FicheroDatos::abrir(string nombre){
 
 	//abrimos
-	f.open(nombre.c_str(),ios::in | ios::out);
+	f.open(nombre.c_str(),ios::in | ios::out | ios::binary);
 
 	if (f.is_open()){
 
@@ -156,7 +156,7 @@ bool FicheroIndice::crear(string fdatos, int columnas, int tamanoC){
 
 	if (!f.is_open()){
 		
-		f.open(fdatos.c_str(),ios::in | ios::out | ios::trunc);
+		f.open(fdatos.c_str(),ios::in | ios::out | ios::trunc | ios::binary);
 		f.seekg (0, ios::beg);
 		tamRegistro = (sizeof(int)+tamanoC)*columnas;
 
@@ -177,7 +177,7 @@ bool FicheroIndice::crear(string fdatos, int columnas, int tamanoC){
 //abre un fichero indice
 bool FicheroIndice::abrir(string fdatos){
 
-	f.open(fdatos.c_str(),ios::in | ios::out);
+	f.open(fdatos.c_str(),ios::in | ios::out | ios::binary);
 
 	if (f.is_open()){
 		int ancho;
@@ -218,7 +218,7 @@ void FicheroIndice::insertar(Registro & nuevo){
 void FicheroIndice::insertar(int posR,Registro & nuevo){
 	if(f.is_open()){
 
-		f.seekp ((nuevo.longitudFija+SIZE_ENTER)*posR+12 +SIZE_ENTER, ios::beg);
+		f.seekp ((nuevo.getTotalSize())*posR+posInicial, ios::beg);
 		
 		for(int i=0;i<nuevo.numeroCampos;i++){
 			f.write(reinterpret_cast<char *>(&nuevo.campos[i].direccion), sizeof(int));

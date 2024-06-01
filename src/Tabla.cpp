@@ -5,6 +5,11 @@
 #include <iostream>
 #include <sys/stat.h>
 
+#if (defined(_WIN32) || defined(__WIN32__))
+#include <direct.h> /* _mkdir */
+#define mkdir(x, y) _mkdir(x)
+#endif
+
 using namespace std;
 
 //funcion que codifoca un Registro a una cadena de caracteres para ser enviadas por el socket
@@ -336,8 +341,11 @@ void Tabla::mostrarTabla(FicheroDatos &ff,int i){
 	ff.f.seekg (0, ios::end);
 	int length = ff.f.tellg();
 
+	printf("%i %i %i\n", length, ff.posInicial, encabezado.getTotalSize());
 	length = (length-ff.posInicial)/encabezado.getTotalSize();
+	printf("%i %i %i\n", length, ff.posInicial, encabezado.getTotalSize());
 
+	// return;
 	for(int i =0;i< length; i++){
 
 		Buffer = Buffer + '*';
@@ -372,7 +380,8 @@ void guardarCampo(FicheroIndice &f,nodoB* n,int &numeroC,int &tamanoC){
 	for(j=0;j<n->clavesUsadas+1;j++){
 		if(!n->hijos[j])
 			break;
-		registro.hijos[j] = n->hijos[j]->page*(f.tamRegistro+2);
+		registro.hijos[j] = n->hijos[j]->page*(registro.getTotalSize());
+		
 		
 	}
 

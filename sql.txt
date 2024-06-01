@@ -1,0 +1,18 @@
+SELECT * FROM MyTable
+SELECT * FROM MyTable WHERE name='Oso'
+INSERT INTO MyTable VALUES('Bel', '27')
+INSERT INTO MyTable VALUES('Ale', '18')
+INSERT INTO MyTable VALUES('Jin', '59')
+INSERT INTO MyTable VALUES('Tin', '1')
+INSERT INTO MyTable VALUES('Yas', '19')
+INSERT INTO MyTable VALUES('Rosa', '25')
+INSERT INTO MyTable VALUES('Stive', '20')
+INSERT INTO MyTable VALUES('Mikel', '12')
+INSERT INTO MyTable VALUES('Abel', '30')
+INSERT INTO MyTable VALUES('Eli', '70')
+INSERT INTO MyTable VALUES('Pan', '10')
+INSERT INTO MyTable VALUES('Edi', '40')
+INSERT INTO MyTable VALUES('Oso', '14')
+INSERT INTO MyTable VALUES('pol', '4')
+
+CREATE TABLE MyTable (name text(10), age text(4))
