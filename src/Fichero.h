@@ -239,7 +239,7 @@ public:
 			Campo temp(longitudC,direccionC);
 			temp = cadena; //asignando el valor a temp
 			
-			anadir(i,temp);
+            campos[i] = temp;
 			
 			cadena = cadena + longitudC;
 		}
@@ -344,6 +344,9 @@ public:
 	~Registro(){
 		campos = 0;
 	}
+    int getTotalSize() {
+        return longitudFija + SIZE_ENTER;
+    }
 };
 
 //clase que gestiona los ficheros de los indices

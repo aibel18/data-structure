@@ -218,7 +218,7 @@ void FicheroIndice::insertar(Registro & nuevo){
 void FicheroIndice::insertar(int posR,Registro & nuevo){
 	if(f.is_open()){
 
-		f.seekp ((nuevo.longitudFija+SIZE_ENTER)*posR+12 +SIZE_ENTER, ios::beg);
+		f.seekp ((nuevo.getTotalSize())*posR+posInicial, ios::beg);
 		
 		for(int i=0;i<nuevo.numeroCampos;i++){
 			f.write(reinterpret_cast<char *>(&nuevo.campos[i].direccion), sizeof(int));

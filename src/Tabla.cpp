@@ -380,7 +380,8 @@ void guardarCampo(FicheroIndice &f,nodoB* n,int &numeroC,int &tamanoC){
 	for(j=0;j<n->clavesUsadas+1;j++){
 		if(!n->hijos[j])
 			break;
-		registro.hijos[j] = n->hijos[j]->page*(f.tamRegistro+2);
+		registro.hijos[j] = n->hijos[j]->page*(registro.getTotalSize());
+		
 		
 	}
 
