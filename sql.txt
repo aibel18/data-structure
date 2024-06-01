@@ -1,6 +1,13 @@
+SELECT * FROM MyTable WHERE name='Eli'
 SELECT * FROM MyTable
-INSERT INTO MyTable VALUES('Abel', '30')
+INSERT INTO MyTable VALUES('Oso', '14')
+INSERT INTO MyTable VALUES('pol', '4')
+INSERT INTO MyTable VALUES('Edi', '40')
+INSERT INTO MyTable VALUES('Pan', '10')
+INSERT INTO MyTable VALUES('Eli', '70')
+
+INSERT INTO MyTable VALUES('Rosa', '25')
 INSERT INTO MyTable VALUES('Stive', '20')
 INSERT INTO MyTable VALUES('Mikel', '12')
-INSERT INTO MyTable VALUES('Rosa', '25')
+INSERT INTO MyTable VALUES('Abel', '30')
 CREATE TABLE MyTable (name text(10), age text(4))

@@ -115,8 +115,8 @@ void dibujatexto(HDC &hdc,string &cadena, int fila, int columna){
 void dibujarFila(HDC &hdc,RegistroDatos &datos, int fila){
 
 	for(int i=0;i<datos.numeroCampos;i++){
-
-		dibujatexto(hdc,(string)datos.campos[i].valor,fila,i);
+        string valor = datos.campos[i].valor;
+		dibujatexto(hdc,valor,fila,i);
 	}
 }
 };
@@ -133,7 +133,7 @@ void mostrarInformacion(HDC &hdc,DTabla &t,Tabla &tabla){
 
 		ff.tamRegistro = tabla.encabezado.tamanoRegistro;
 
-		ff.leerRegistro2(*tabla.resultados,temp);
+		// ff.leerRegistro2(*tabla.resultados,temp);
 
 		RegistroDatos datos(tabla.encabezado.numeroCampos,tabla.encabezado.tamanoRegistro,temp);
 

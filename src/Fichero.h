@@ -7,7 +7,7 @@
 using namespace std;
 
 #if (defined(_WIN32) || defined(__WIN32__))
-	#define SIZE_ENTER 3
+	#define SIZE_ENTER 1
 #else
 	#define SIZE_ENTER 1
 #endif
