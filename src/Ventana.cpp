@@ -3,7 +3,7 @@
 #include "Ventana.h"
 
 #include "AnalizadorSintactico.h"
-#include "tabla.h"
+#include "Tabla.h"
 
 
 Ventana::Ventana(WNDPROC winProc, const char *nombre, HINSTANCE hins){
@@ -119,28 +119,40 @@ void dibujarFila(HDC &hdc,RegistroDatos &datos, int fila){
 		dibujatexto(hdc,valor,fila,i);
 	}
 }
-};
+//dibuja toda una fila de datos
+void escribirContenidoTabla(HDC &hdc,string title,string cadena){
 
-void mostrarInformacion(HDC &hdc,DTabla &t,Tabla &tabla){
+    unsigned int i = 0,j=0,k=0,l=0;
 
-	FicheroDatos ff;
+    dibujatexto(hdc,title,l++,0);
+    
+    const char * temp = cadena.c_str();
+    while(i < cadena.size()){
 
-//	tabla.cargar(tabla.nombre);
+        while(*temp != '\0'&& *temp != '|'){
 
-	if(ff.abrir("BaseDatos/"+tabla.nombre+".txt")){	
+            temp = temp +1;
+            i++;
+        }
+        string ca= cadena.substr(k,i-k);
+        dibujatexto(hdc,ca,l,j);
 
-		char *temp = new char[tabla.encabezado.tamanoRegistro];
+        temp= temp +1;			
 
-		ff.tamRegistro = tabla.encabezado.tamanoRegistro;
+        i++;
+        j++;
 
-		// ff.leerRegistro2(*tabla.resultados,temp);
-
-		RegistroDatos datos(tabla.encabezado.numeroCampos,tabla.encabezado.tamanoRegistro,temp);
-
-		t.dibujarFila(hdc,datos,1);
-	
-	}
+        if(*(temp) == '*' ){
+            l++;
+            i++;
+            j=0;
+            temp= temp +1;					
+        }
+        
+        k = i;
+    }
 }
+};
 
 #define ACEPTAR 1000
 
@@ -220,7 +232,7 @@ LRESULT CALLBACK  procesos(HWND hwnd, UINT message, WPARAM wParam, LPARAM
 								*filas = 10;//tabla.encabezado.numeroCampos;
 
 								dtabla.dibujaTabla(hdc,*filas,*columnas);
-								mostrarInformacion(hdc,dtabla,tabla);
+                                dtabla.escribirContenidoTabla(hdc,tabla.nombre,tabla.Buffer);
 								ReleaseDC(hwnd,hdc);
 
 								SetWindowText(estado.IdVentana,"bien selec");
